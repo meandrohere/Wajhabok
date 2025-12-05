@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قطاع تاجيس | الواجهة الرئيسية</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;700;900&family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* ألوان الفخامة */
+            --brown-dark: #120a05; 
+            --brown-mid: #281b11; 
+            --gold: #FFD700; 
+            --gold-light: #FFE082;
+            --gold-shadow: rgba(255, 215, 0, 0.6);
+            --text-color: #fff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Cairo', sans-serif; 
+            background: radial-gradient(circle at center, var(--brown-mid) 0%, var(--brown-dark) 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* ====== الشعار ====== */
+        .logo-image {
+            width: 150px; 
+            height: auto;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px var(--gold-shadow));
+            cursor: pointer; /* للإشارة إلى أنه قابل للضغط */
+            transition: transform 0.2s;
+        }
+        .logo-image:hover {
+            transform: scale(1.05);
+        }
+
+        /* ====== الهيدر (العنوان) ====== */
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            width: 90%;
+            max-width: 1000px;
+            border-bottom: 2px solid var(--gold-shadow);
+        }
+
+        .header h1 {
+            font-family: 'Cairo', sans-serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            color: var(--gold);
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px var(--gold-shadow), 0 0 5px rgba(255, 255, 255, 0.1);
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--gold-light);
+            font-weight: 300;
+        }
+
+        /* ====== رسالة "لا يوجد أحداث" ====== */
+        .no-events-message {
+            margin: 40px 0;
+            padding: 15px 30px;
+            background: rgba(40, 27, 17, 0.8);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--gold-light);
+        }
+
+        /* ====== منطقة المحتوى القصصي الجديدة ====== */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            width: 90%;
+            max-width: 800px; 
+            margin-top: 20px;
+            gap: 30px;
+        }
+
+        /* ====== بطاقة النص القصصي (Story Card) ====== */
+        .story-card {
+            background: rgba(40, 27, 17, 0.9); 
+            padding: 40px;
+            border-left: 5px solid var(--gold);
+            border-right: 5px solid var(--gold);
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+            text-align: right;
+            line-height: 1.8;
+            color: var(--gold-light);
+        }
+
+        .story-card p {
+            margin-bottom: 15px;
+            font-family: 'Cairo', sans-serif;
+            font-size: clamp(1rem, 2.2vw, 1.4rem);
+            font-weight: 300;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .story-card strong {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .story-card .options {
+            padding-top: 10px;
+            border-top: 1px solid var(--gold-shadow);
+            margin-top: 30px;
+        }
+
+        .story-card .hashtag {
+            display: block;
+            margin-top: 8px;
+            font-family: 'Press Start 2P', monospace; 
+            font-size: 0.7rem;
+            color: var(--gold-shadow);
+            text-align: center;
+        }
+
+        .story-card .divider {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid var(--gold-shadow);
+            opacity: 0.5;
+        }
+
+        /* =========================================
+           تنسيق لعبة التشفير (MODAL)
+           ========================================= */
+        #game-modal {
+            display: none; /* يبدأ مخفياً */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.85); /* خلفية معتمة */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--brown-dark);
+            padding: 30px;
+            border: 3px solid var(--gold);
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 0 50px var(--gold-shadow);
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-content h3 {
+            color: var(--gold);
+            font-family: 'Press Start 2P', monospace;
+            margin-bottom: 20px;
+            font-size: clamp(1rem, 3vw, 1.5rem);
+        }
+
+        #cipher-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--gold-light);
+            color: var(--hacker-green); /* استخدام لون الهاكرز للتباين */
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        #submit-cipher {
+            background-color: var(--gold);
+            color: var(--brown-dark);
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 900;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #submit-cipher:hover {
+            background-color: var(--gold-light);
+        }
+        
+        #game-result {
+            color: var(--gold);
+            margin-top: 15px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            min-height: 20px;
+        }
+        .success-text {
+            color: #00FF41; /* لون أخضر للنجاح */
+            text-shadow: 0 0 10px #00FF41;
+        }
+    </style>
+</head>
+<body>
+    <img src="tag.png" alt="شعار قطاع تاجيس" class="logo-image" id="logo-trigger">
+    
+    <header class="header">
+        <h1>الواجهة الرئيسية للنظام</h1>
+        <p>مرحباً بك في قطاع تاجيس، بياناتك مؤمنة.</p>
+    </header>
+
+    <div class="no-events-message">
+        لا يوجد أحداث حالياً
+    </div>
+
+    <div class="main-content">
+        <section class="story-card">
+            <p>لو علمتَ أنَّ مكان عملك يخفي سرًّا قديمًا ولعنة…</p>
+            
+            <p>فأيُّ طريقٍ ستسلك؟</p>
+            
+            <div class="options">
+                <p><strong>1-</strong> هل ستترك العمل فورًا وتنجو بجلدك؟</p>
+                <p><strong>2-</strong> أم ستواصل العمل وتتصنّع الجهل من أجل المال؟</p>
+                <p><strong>3-</strong> أم ستفعل مثلي، وتبحث خلف السر حتى تُوقِع نفسك في كارثة؟</p>
+            </div>
+
+            <hr class="divider">
+            
+            <span class="hashtag">#قطاع_تاجيس</span>
+            <span class="hashtag">#ادارة_الـمجـمع_التـرفيـهي</span>
+            <span class="hashtag">#CRD_TAGIS_الاستخبارات</span>
+        </section>
+    </div>
+
+    <div id="game-modal">
+        <div class="modal-content">
+            <h3 id="modal-title">فك شفرة: مستوى 1</h3>
+            <p style="color: var(--gold-light); margin-bottom: 10px; font-size: 0.9rem;">
+                أدخل الكلمة السرية لفتح السجل (تلميح: أربعة حروف).
+            </p>
+            <input type="text" id="cipher-input" maxlength="4" placeholder="....">
+            <button id="submit-cipher">إرسال</button>
+            <div id="game-result"></div>
+        </div>
+    </div>
+
+    <script>
+        const logoTrigger = document.getElementById('logo-trigger');
+        const gameModal = document.getElementById('game-modal');
+        const cipherInput = document.getElementById('cipher-input');
+        const submitButton = document.getElementById('submit-cipher');
+        const gameResult = document.getElementById('game-result');
+
+        // الكلمة السرية (يمكنك تغييرها لاحقاً)
+        const secretKey = "غولد"; 
+        let gamePlayed = false; // لمنع اللعب مرة أخرى بعد النجاح
+
+        // 1. فتح النموذج عند الضغط على الشعار
+        logoTrigger.addEventListener('click', () => {
+            gameModal.style.display = 'flex';
+            cipherInput.value = '';
+            gameResult.textContent = '';
+            submitButton.disabled = false;
+        });
+
+        // 2. إغلاق النموذج عند الضغط خارج المحتوى
+        gameModal.addEventListener('click', (e) => {
+            if (e.target === gameModal) {
+                gameModal.style.display = 'none';
+            }
+        });
+
+        // 3. منطق فحص كلمة السر
+        submitButton.addEventListener('click', () => {
+            if (gamePlayed) return; // لا تفعل شيئاً إذا فاز
+
+            const input = cipherInput.value.trim();
+            
+            // تحقق بسيط للتأكد من أنها نفس الكلمة السرية مع تجاهل حالة الأحرف
+            if (input === secretKey) {
+                // النجاح
+                gameResult.textContent = 'واو! يبدو أن أسرار هذا المكان تنكشف بسرعة.لكن لا تتحمس ايها مستكشف صغير لم تفز بشيء';
+                gameResult.classList.add('success-text');
+                submitButton.disabled = true;
+                cipherInput.disabled = true;
+                gamePlayed = true;
+
+                // يمكن إضافة تأثير إغلاق بعد ثوانٍ قليلة
+                setTimeout(() => {
+                    gameModal.style.display = 'none';
+                }, 4000);
+                
+            } else {
+                // الفشل
+                gameResult.textContent = 'خطأ في التشفير! حاول مجدداً.';
+                gameResult.classList.remove('success-text');
+                cipherInput.value = '';
+                cipherInput.focus();
+            }
+        });
+    </script>
+</body>
+</html>

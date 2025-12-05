@@ -1,150 +1,366 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أخبار إيطاليا المستقبلية</title>
-<style>
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: "Cairo", Arial, sans-serif;
-    background: #f4f4f4;
-    color: #333;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>قطاع تاجيس | تحول حاد</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;700;900&family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* ألوان الفخامة (للجزء الثاني) */
+            --brown-dark: #120a05; 
+            --brown-mid: #281b11; 
+            --gold: #FFD700; 
+            --gold-shadow: rgba(255, 215, 0, 1); /* أعلى توهج ذهبي */
+            /* ألوان الهاكرز (للجزء الأول) */
+            --hacker-green: #00FF41;
+            --glitch-color-1: #00F0FF;
+            --glitch-color-2: #FF00FF;
+            --terminal-text: var(--hacker-green);
+        }
 
-  header {
-    text-align: center;
-    padding: 40px 20px;
-    background: linear-gradient(90deg, #008C45, #F4F4F4, #CD212A); /* ألوان العلم الإيطالي */
-    border-bottom: 3px solid #008C45;
-  }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  header h1 { font-size: 2.5rem; color: #CD212A; margin: 0; }
-  header p { font-size: 1.1rem; color: #006400; }
+        body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            font-family: 'VT323', monospace; 
+            background: black; 
+            color: var(--terminal-text); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        /* =========================================
+           LAYER 2: ELEGANT MODE - الذهبي والفخامة 
+           ========================================= */
+        #elegant-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, var(--brown-mid) 0%, var(--brown-dark) 100%);
+            opacity: 0;
+            transition: opacity 1.5s ease-out;
+            z-index: 5;
+            font-family: 'Cairo', sans-serif;
+            text-align: center;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center;
+            padding-top: 50px; 
+        }
 
-  main { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
-  .timeline { display: flex; flex-direction: column; gap: 25px; }
+        /* **تعديل لرفع العنوان وتقليل المسافة بينه وبين الشعار** */
+        #logo-tag {
+            width: 180px; 
+            height: auto;
+            margin-bottom: 40px; /* تم تقليلها من 120px */
+            transform: translateY(-50px) scale(0.9); 
+            opacity: 0; 
+            transition: all 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
+        }
+        #logo-tag.show { 
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
 
-  .event {
-    background: #fff;
-    border-left: 6px solid #008C45; /* شريط جانبي بالأخضر */
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
-  }
-  .event:hover { transform: translateY(-5px); }
+        /* **تعديل لحذف المستطيل حول جملة "قطاع تاجيس"** */
+        .logo-title {
+            color: var(--gold);
+            opacity: 0;
+            transform: scale(1) translateY(-20px); 
+            transition: all 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
+            
+            font-size: clamp(3rem, 6.5vw, 4rem); 
+            padding-bottom: 4px;
+            /* تم حذف border-bottom و box-shadow */
+            
+            letter-spacing: 6px; 
+            
+            /* زيادة الفخامة والعمق: ظل داخلي وخارجي قويان */
+            text-shadow: 
+                0 0 8px #FFC700,      /* توهج داخلي خفيف */
+                0 0 20px var(--gold-shadow),  /* توهج خارجي متوسط */
+                2px 2px 4px #7a5f00,         /* تأثير عمق 3D */
+                -2px -2px 4px #fff292;        /* تأثير عمق 3D */
+            
+            animation: gold-title-pulse 3s infinite alternate paused;
+            font-family: 'Cairo', sans-serif;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .logo-title.show {
+            transform: scale(1) translateY(0); 
+            opacity: 1;
+            animation-play-state: running; 
+        }
 
-  .event-header {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 12px;
-  }
+        /* تأثير نبض بسيط */
+        @keyframes gold-title-pulse {
+            from { transform: scale(0.98) translateY(0); }
+            to { transform: scale(1.02) translateY(-2px); }
+        }
 
-  .event-icon {
-    width: 45px; height: 45px;
-    background: #CD212A;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 1.3rem;
-  }
+        /* ====== شريط التحميل ====== */
+        .loading-line{ width:70%; height:10px; background: rgba(255,255,255,0.06); border-radius:6px; overflow:hidden; margin-top:18px;}
+        .loading-progress{ width:0%; height:100%; background: linear-gradient(90deg, rgba(255,215,0,0.9), rgba(255,230,120,0.9));}
 
-  .event h2 { margin:0; color: #008C45; font-size:1.4rem; }
+        /* ====== نصوص الجزء الثاني — ذهبية وبكسلز ====== */
+        /* **تعديل لرفع النص الصغير** */
+        #text-carousel { margin-top: 8px; width: 90%; max-width: 900px; } /* تم تقليل margin-top من 18px */
+        #text-carousel .msg{
+            color: var(--gold);
+            opacity: 0;
+            margin: 10px 0;
+            font-family: 'Press Start 2P', monospace; 
+            font-size: clamp(10px, 2.2vw, 18px);
+            line-height: 1.4;
+            letter-spacing: 0.6px;
+            text-shadow: 
+                0 0 4px rgba(255,215,0,0.8),
+                0 0 10px rgba(255,200,0,0.6);
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: grayscale;
+            transform: translateZ(0);
+            text-rendering: optimizeSpeed;
+            filter: drop-shadow(0 0 6px rgba(255,215,0,0.25));
+        }
 
-  .event p { margin: 10px 0 0; color: #333; font-size:1rem; line-height:1.6; }
-  .event img { width:100%; max-height:220px; object-fit:cover; border-radius:6px; margin:10px 0; }
+        /* عندما تُعرض الرسالة نجعلها تظهر */
+        #text-carousel .msg.show{ opacity: 1; }
 
-  .event-tag {
-    display:inline-block;
-    background:#F4F4F4;
-    color:#CD212A;
-    padding:4px 12px;
-    border-radius:15px;
-    font-size:0.85rem;
-    border:1px solid #008C45;
-    margin-top:8px;
-  }
+        /* فاصل الشعار والنص */
+        #text-carousel span{ color: rgba(255,240,180,1); }
 
-  footer {
-    text-align:center;
-    padding:20px;
-    background:#fff;
-    border-top:2px solid #008C45;
-    color:#555;
-    margin-top:50px;
-  }
-</style>
+        /* عناصر الهاك (الجزء الأول) */
+        /* **تعديل z-index لتبقيها ظاهرة في الخلفية** */
+        #hack-layer{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:1; } /* z-index تم تغييره إلى 1 */
+        #terminal{ width:70%; max-height:40%; overflow:auto; padding:12px; background: rgba(0,0,0,0.6); border:1px solid rgba(0,255,65,0.08); box-shadow: 0 8px 40px rgba(0,255,65,0.03); }
+        #chaos{ display:none; position: absolute; inset:0; pointer-events:none; }
+        #no-signal{ display:none; margin-top:12px; font-weight:bold; }
+
+        /* CSS للفلاش */
+        #flash {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white; 
+            opacity: 0;
+            z-index: 20; 
+            pointer-events: none;
+        }
+
+        /* تأثير اهتزاز عند الريبوت */
+        .screen-shake{ animation: shake 0.6s ease-in-out; }
+        @keyframes shake{ 10%{transform:translateX(-6px)} 20%{transform:translateX(6px)} 30%{transform:translateX(-4px)} 40%{transform:translateX(4px)} 50%{transform:translateX(-2px)} 60%{transform:translateX(2px)} 70%{transform:translateX(-1px)} 80%{transform:translateX(1px)} 100%{transform:translateX(0)} }
+
+        /* لمسات استجابة */
+        @media (max-width:6000px){ .logo-title{ letter-spacing:10px; } }
+    </style>
 </head>
 <body>
-
-<header>
-  <h1>🇮🇹 أخبار إيطاليا المستقلة خبار
-  <p>تغطية حصرية محايدة لأهم الأحداث الاستراتيجية داخل وخارج إيطاليا</p>
-</header>
-
-<main>
-  <div class="timeline" id="timeline">
-    <!-- سيتم إدخال الأحداث من Firebase -->
-  </div>
-</main>
-
-<footer>
-  <p>جميع الحقوق محفوظة © 2025</p>
-</footer>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCZh6Yg0PP8MHAuxKQhIgd91nJY-z6jwPE",
-  authDomain: "bank-zift.firebaseapp.com",
-  databaseURL: "https://bank-zift-default-rtdb.firebaseio.com",
-  projectId: "bank-zift",
-  storageBucket: "bank-zift.firebasestorage.app",
-  messagingSenderId: "653679280221",
-  appId: "1:653679280221:web:da287f325d0434a7b8cdb4"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const timeline = document.getElementById("timeline");
-
-function createEventHTML(event) {
-  const icon = event.icon || "📰";
-  const title = event.title || "بدون عنوان";
-  const text = event.details || event.text || "";
-  const tag = event.type || "";
-  const img = event.image ? `<img src="${event.image}" alt="">` : "";
-
-  return `
-    <div class="event">
-      <div class="event-header">
-        <div class="event-icon">${icon}</div>
-        <h2>${title}</h2>
-      </div>
-      ${img}
-      <p>${text}</p>
-      ${tag ? `<span class="event-tag">${tag}</span>` : ""}
+    <div id="hack-layer">
+        <h1 id="main-status">SYSTEM BREACHED</h1>
+        <div id="terminal"></div>
+        <div id="chaos"></div>
+        <div id="no-signal">!! ACCESS DENIED !!</div>
     </div>
-  `;
-}
+    
+    <div id="elegant-layer">
+        <img id="logo-tag" src="tag.png" alt="شعار القطاع">
+        
+        <h1 class="logo-title">قطاع تاجيس</h1>
+        
+        <div id="text-carousel">
+            <p class="msg" data-text="تمت استعادة الهوية... مرحباً بك في <span>القطاع</span>."></p>
+            <p class="msg" data-text="هنا يصنع <span>Anime Gold</span> الألغاز."></p>
+            <p class="msg" data-text="مهمتك: الدفاع عن السيادة... كن مستعداً."></p>
+            <p class="msg" data-text="تحذير: النظام يتطلب <span>العبقرية</span>."></p>
+            <p class="msg" data-text="أنت تحت المراقبة... **البدء وشيك**"></p>
+        </div>
+        
+        <div class="loading-line">
+            <div class="loading-progress" id="progress-bar"></div>
+        </div>
+    </div>
+    
+    <div id="flash"></div>
 
-const eventsRef = ref(db, "events");
-onValue(eventsRef, snapshot => {
-  const data = snapshot.val();
-  timeline.innerHTML = "";
-  if (!data) return;
-  Object.values(data).forEach(ev => {
-    timeline.innerHTML += createEventHTML(ev);
-  });
-});
-</script>
+    <script>
+        const terminal = document.getElementById('terminal');
+        const chaos = document.getElementById('chaos');
+        const noSignal = document.getElementById('no-signal');
+        const hackLayer = document.getElementById('hack-layer');
+        const elegantLayer = document.getElementById('elegant-layer');
+        const logo = document.querySelector('.logo-title');
+        const logoTag = document.getElementById('logo-tag'); 
+        const msgs = document.querySelectorAll('.msg');
+        const progressBar = document.getElementById('progress-bar');
+        const flash = document.getElementById('flash');
+        const mainStatus = document.getElementById('main-status');
 
+        // **تصحيح الخطأ البرمجي: يجب وضع منطق بدء التشغيل في دالة**
+        function initialize() {
+            if (!localStorage.getItem('splashShown')) {
+                localStorage.setItem('splashShown', 'true');
+                startHacking();
+            } else {
+                // النقل المباشر للمستخدمين العائدين
+                window.location.href = 'home.html';
+            }
+        }
+        
+        async function typeToTerminal(text) {
+            terminal.innerHTML += '<span>> </span>';
+            let i = 0;
+            const speed = 25; 
+            
+            return new Promise(resolve => {
+                const interval = setInterval(() => {
+                    if (i < text.length) {
+                        terminal.innerHTML += text.charAt(i);
+                        i++;
+                        terminal.scrollTop = terminal.scrollHeight;
+                    } else {
+                        clearInterval(interval);
+                        terminal.innerHTML += '<br>';
+                        resolve();
+                    }
+                }, speed);
+            });
+        }
+        
+        function generateChaos() {
+             chaos.innerHTML = '';
+             const chars = "[]{}<>|/\\^!@#$%&*+=-_~`'\"01";
+             for (let i = 0; i < 200; i++) {
+                 const span = document.createElement('span');
+                 span.textContent = chars.charAt(Math.floor(Math.random() * chars.length));
+                 span.style.position = 'absolute';
+                 span.style.left = `${Math.random() * 100}%`;
+                 span.style.top = `${Math.random() * 100}%`;
+                 span.style.fontSize = `${Math.random() * 3 + 1}rem`;
+                 span.style.color = Math.random() > 0.5 ? 'var(--glitch-color-1)' : 'var(--glitch-color-2)';
+                 chaos.appendChild(span);
+             }
+        }
+
+        async function startHacking() {
+            await typeToTerminal('INITIATING TAJIS_PROTOCOL...');
+            await typeToTerminal('SCANNING FOR VULNERABILITIES...');
+            await typeToTerminal('TAJIS_DEFENSE_LEVEL: 9/10. SYSTEM SECURED.');
+            await typeToTerminal('BYPASSING FIREWALL... STATUS: <span>SUCCESS!</span>');
+            
+            await typeToTerminal('INJECTING MALICIOUS CODE: <span style="color:red;">START_THEFT.EXE</span>...');
+            await typeToTerminal('UPLOADING... [======================] 100%');
+
+            setTimeout(startChaos, 1500);
+        }
+
+        function startChaos() {
+            terminal.style.display = 'none';
+            mainStatus.style.display = 'none';
+            chaos.style.display = 'block';
+            noSignal.style.display = 'block';
+            hackLayer.classList.add('glitch');
+
+            let chaosInterval = setInterval(generateChaos, 100);
+            
+            setTimeout(() => {
+                clearInterval(chaosInterval);
+                executeRestore();
+            }, 3000); 
+        }
+
+        function executeRestore() {
+            hackLayer.classList.remove('glitch');
+            chaos.style.display = 'none';
+            noSignal.style.display = 'none';
+            terminal.style.display = 'block';
+            terminal.innerHTML += '<br><span style="color: red;">[CRITICAL ERROR] INITIATING FORCED REBOOT...</span><br>';
+            mainStatus.style.display = 'block';
+            mainStatus.innerText = 'SYSTEM REBOOTING...';
+
+            setTimeout(() => {
+                hackLayer.classList.add('screen-shake'); 
+                
+                flash.style.transition = 'none';
+                flash.style.opacity = 1; 
+
+                setTimeout(() => {
+                    // **تم ترك hackLayer ظاهرة (بـ z-index = 1) وإظهار الطبقة الذهبية فوقها**
+                    elegantLayer.style.opacity = 1;
+                    
+                    flash.style.transition = 'opacity 0.6s ease-out';
+                    flash.style.opacity = 0; 
+                    
+                    logo.classList.add('show');
+                    logoTag.classList.add('show'); 
+                    runSlideshow();
+                }, 100); 
+            }, 1000);
+        }
+
+        function runSlideshow() {
+            const totalDuration = msgs.length * 3500; 
+
+            function showMsg(msgElement) {
+                return new Promise(resolve => {
+                    msgElement.classList.add('show');
+                    const textWithTags = msgElement.getAttribute('data-text'); 
+                    msgElement.innerHTML = '';
+                    
+                    let charIndex = 0;
+                    const msgInterval = setInterval(() => {
+                        if (charIndex < textWithTags.length) {
+                            
+                            if (textWithTags.substring(charIndex, charIndex + 6) === '<span>') {
+                                msgElement.innerHTML += '<span>';
+                                charIndex += 6;
+                            } else if (textWithTags.substring(charIndex, charIndex + 7) === '</span>') {
+                                msgElement.innerHTML += '</span>';
+                                charIndex += 7;
+                            } else {
+                                msgElement.innerHTML += textWithTags.charAt(charIndex);
+                                charIndex++;
+                            }
+
+                        } else {
+                            clearInterval(msgInterval);
+                            setTimeout(() => { msgElement.classList.remove('show'); resolve(); }, 2500); 
+                        }
+                    }, 60); 
+                });
+            }
+
+            async function processMessages() {
+                for (const msg of msgs) {
+                    await showMsg(msg);
+                }
+                
+                setTimeout(() => {
+                    window.location.href = 'home.html'; 
+                }, 1000); 
+            }
+
+            setTimeout(() => {
+                progressBar.style.transition = `width ${totalDuration / 1000}s linear`;
+                progressBar.style.width = "100%";
+            }, 1500);
+
+            processMessages();
+        }
+
+        // ابدأ التجربة بالتصحيح
+        initialize();
+    </script>
 </body>
 </html>

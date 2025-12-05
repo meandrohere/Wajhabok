@@ -10,14 +10,24 @@
     
     <style>
         :root {
-            /* ألوان الفخامة */
             --brown-dark: #120a05; 
             --brown-mid: #281b11; 
             --gold: #FFD700; 
             --gold-light: #FFE082;
             --gold-shadow: rgba(255, 215, 0, 0.6);
             --text-color: #fff;
+            --hacker-green: #00FF41;
+            --hacker-red: #FF0041;
         }
+
+        /* تم حذف هذا الجزء:
+        .header h1::after {
+            content: "مربع دائرة نجمة"; 
+            position: absolute;
+            left: -9999px;
+            visibility: hidden;
+        }
+        */
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -32,22 +42,37 @@
             padding: 20px;
         }
 
-        /* ====== الشعار ====== */
         .logo-image {
             width: 150px; 
             height: auto;
             margin-top: 30px;
             margin-bottom: 20px;
             filter: drop-shadow(0 0 10px var(--gold-shadow));
-            cursor: pointer; /* للإشارة إلى أنه قابل للضغط */
+            cursor: pointer;
             transition: transform 0.2s;
         }
         .logo-image:hover {
             transform: scale(1.05);
         }
+        .logo-image.shaking {
+            animation: shake 0.5s infinite;
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
 
-        /* ====== الهيدر (العنوان) ====== */
         .header {
+            position: relative; 
             text-align: center;
             padding: 20px 0;
             width: 90%;
@@ -68,6 +93,375 @@
             font-size: clamp(1rem, 2vw, 1.2rem);
             color: var(--gold-light);
             font-weight: 300;
+        }
+
+        .no-events-message {
+            margin: 40px 0;
+            padding: 15px 30px;
+            background: rgba(40, 27, 17, 0.8);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--gold-light);
+            cursor: default;
+            user-select: none;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            width: 90%;
+            max-width: 800px; 
+            margin-top: 20px;
+            gap: 30px;
+        }
+
+        .story-card {
+            background: rgba(40, 27, 17, 0.9); 
+            padding: 40px;
+            border-left: 5px solid var(--gold);
+            border-right: 5px solid var(--gold);
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+            text-align: right;
+            line-height: 1.8;
+            color: var(--gold-light);
+        }
+
+        .story-card p {
+            margin-bottom: 15px;
+            font-family: 'Cairo', sans-serif;
+            font-size: clamp(1rem, 2.2vw, 1.4rem);
+            font-weight: 300;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .story-card .options p {
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .story-card .options p:hover {
+            color: var(--gold);
+        }
+
+        #cipher-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--gold-light);
+            color: var(--hacker-green); 
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        
+        #game-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.85); 
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--brown-dark);
+            padding: 30px;
+            border: 3px solid var(--gold);
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 0 50px var(--gold-shadow);
+            animation: fadeIn 0.5s;
+        }
+        
+        #submit-cipher {
+            background-color: var(--gold);
+            color: var(--brown-dark);
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 900;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #submit-cipher:hover {
+            background-color: var(--gold-light);
+        }
+        
+        #game-result {
+            color: var(--gold);
+            margin-top: 15px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            min-height: 20px;
+        }
+        .success-text {
+            color: var(--hacker-green); 
+            text-shadow: 0 0 10px var(--hacker-green);
+        }
+        .fail-text {
+            color: var(--hacker-red);
+            text-shadow: 0 0 10px var(--hacker-red);
+        }
+        .no-click {
+             cursor: default !important;
+        }
+
+    </style>
+</head>
+<body>
+    <img src="tag.png" alt="شعار قطاع تاجيس" class="logo-image" id="logo-trigger">
+    
+    <header class="header">
+        <h1>الواجهة الرئيسية للنظام</h1>
+        <p>مرحباً بك في قطاع تاجيس، بياناتك مؤمنة.</p>
+    </header>
+
+    <div class="no-events-message">
+        لا يوجد أحداث حالياً
+    </div>
+
+    <div class="main-content">
+        <section class="story-card">
+            <p>لو علمتَ أنَّ مكان عملك يخفي سرًّا قديمًا ولعنة…</p>
+            
+            <p>فأيُّ طريقٍ ستسلك؟</p>
+            
+            <div class="options">
+                <p id="math-trigger"><strong>1-</strong> هل ستترك العمل فورًا وتنجو بجلدك؟</p>
+                <p id="time-trigger"><strong>2-</strong> أم ستواصل العمل وتتصنّع الجهل من أجل المال؟</p>
+                <p id="manipulation-trigger"><strong>3-</strong> أم ستفعل مثلي، وتبحث خلف السر حتى تُوقِع نفسك في كارثة؟</p>
+            </div>
+
+            <hr class="divider">
+            
+            <span class="hashtag">#قطاع_تاجيس</span>
+            <span class="hashtag">#ادارة_الـمجـمع_التـرفيـهي</span>
+            <span class="hashtag">#CRD_TAGIS_الاستخبارات</span>
+        </section>
+    </div>
+
+    <div id="game-modal">
+        <div class="modal-content">
+            <h3 id="modal-title">فك شفرة: المستوى $N$</h3>
+            <p style="color: var(--gold-light); margin-bottom: 10px; font-size: 0.9rem;" id="modal-hint">
+                التلميح هنا.
+            </p>
+            <div id="math-challenge-content" style="display: none;">
+                <p id="math-question" style="font-size: 1.5rem; color: var(--hacker-green); margin-bottom: 15px;"></p>
+            </div>
+            <input type="text" id="cipher-input" maxlength="10" placeholder="....">
+            <button id="submit-cipher">إرسال</button>
+            <div id="game-result"></div>
+        </div>
+    </div>
+
+    <script>
+        const goldColor = '#FFD700'; 
+        const defaultMessage = 'لا توجد صلاحية للوصول للمعلومات حالياً.';
+
+        const logoTrigger = document.getElementById('logo-trigger');
+        const gameModal = document.getElementById('game-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalHint = document.getElementById('modal-hint');
+        const cipherInput = document.getElementById('cipher-input');
+        const submitButton = document.getElementById('submit-cipher');
+        const gameResult = document.getElementById('game-result');
+        const mathTrigger = document.getElementById('math-trigger');
+        const timeTrigger = document.getElementById('time-trigger');
+        const manipulationTrigger = document.getElementById('manipulation-trigger');
+        const mathQuestionElement = document.getElementById('math-question');
+        const mathContent = document.getElementById('math-challenge-content');
+
+        let currentLevel = 0;
+        let gameActive = false;
+        let timer = null; 
+
+        // تم تعديل قائمة المستويات لتبدأ من المستوى 1 وتستثني المستوى 2 القديم
+        const levels = [
+            { key: "غولد", type: "input", maxlength: 4, hint: "أدخل الكلمة السرية لفتح السجل (تلميح: أربعة حروف عربية - كلمة فخامة).", title: "فك شفرة: المستوى 1 (كلمة السر)" },
+            { key: 24, type: "math", title: "فك شفرة: المستوى 2 (رياضي)", question: "كم ناتج (4 + 2 * 10)؟ لا تستخدم الآلة الحاسبة!" },
+            { key: 'clicked', type: "time", title: "فك شفرة: المستوى 3 (توقيت)" }
+        ];
+        
+        function showGenericFail(targetElement, message = defaultMessage) {
+            targetElement.classList.add('fail-text');
+            const originalText = targetElement.innerHTML; 
+            targetElement.innerHTML = message;
+
+            setTimeout(() => { 
+                targetElement.classList.remove('fail-text'); 
+                targetElement.innerHTML = originalText;
+            }, 1500);
+        }
+
+        function setupModal(levelIndex) {
+            const level = levels[levelIndex];
+            modalTitle.textContent = level.title;
+            modalHint.textContent = level.hint || 'أدخل الإجابة...';
+            
+            mathContent.style.display = (level.type === 'math') ? 'block' : 'none';
+            cipherInput.style.display = 'block';
+            submitButton.style.display = 'block';
+
+            if (level.type === 'math') {
+                mathQuestionElement.textContent = level.question;
+            }
+
+            cipherInput.value = '';
+            cipherInput.maxLength = level.maxlength || 10;
+            cipherInput.placeholder = ".".repeat(level.maxlength || 10);
+            gameResult.textContent = '';
+            submitButton.disabled = false;
+            cipherInput.disabled = false;
+        }
+
+        function success(message, isFinal) {
+            
+            gameResult.classList.remove('fail-text');
+            gameResult.classList.add('success-text');
+            
+            submitButton.disabled = true;
+            cipherInput.disabled = true;
+            gameActive = false;
+            
+            currentLevel++; 
+
+            if (isFinal) {
+                gameResult.textContent = `يبدو أنك حليت معظم أسرار هذا المكان. علي أن أعترف، أنت الآن... قد تكون مؤهلاً لخوض اختبارات تاجيس!`;
+            } else {
+                gameResult.textContent = `نجاح! تم فك الحماية في هذا القطاع. ابحث عن التحدي التالي بنفسك في الواجهة!`;
+            }
+        
+            if (gameModal.style.display === 'flex') {
+                setTimeout(() => {
+                    gameModal.style.display = 'none';
+                }, isFinal ? 4000 : 2000); 
+            }
+        }
+        
+        function fail(message) {
+            gameResult.textContent = message;
+            gameResult.classList.add('fail-text');
+            gameResult.classList.remove('success-text');
+            cipherInput.value = '';
+            cipherInput.focus();
+        }
+
+        // المستوى 1 (كلمة السر) يتم تفعيله عبر الشعار 
+        logoTrigger.addEventListener('click', () => {
+            if (currentLevel === 0) {
+                gameModal.style.display = 'flex';
+                setupModal(0);
+                gameActive = true;
+            } else if (currentLevel === 2) {
+                 // تحدي التوقيت يستخدم هذا المعالج (handleTimeChallenge)
+            } else {
+                 // لا رسالة فشل هنا لتجنب تداخل الرسائل
+            }
+        });
+
+        // المستوى 2 (رياضي)
+        mathTrigger.addEventListener('click', () => {
+            if (currentLevel === 1) {
+                gameModal.style.display = 'flex';
+                setupModal(1);
+                gameActive = true;
+            } else {
+                showGenericFail(mathTrigger);
+            }
+        });
+
+        // المستوى 3 (توقيت)
+        timeTrigger.addEventListener('click', () => {
+            if (currentLevel === 2) {
+                logoTrigger.classList.add('shaking');
+                timeTrigger.innerHTML = '<strong>2-</strong> انقر على الشعار عندما يتوقف اهتزازه تماماً! لديك 3 ثواني فقط.';
+                timeTrigger.classList.add('no-click'); 
+                
+                const stopTime = Math.floor(Math.random() * 2000) + 1000;
+                
+                timer = setTimeout(() => {
+                    logoTrigger.classList.remove('shaking');
+                    timeTrigger.innerHTML = '<strong>2-</strong> !! اضغط الشعار الآن !!';
+                    timeTrigger.classList.remove('no-click');
+                    
+                    const failTimer = setTimeout(() => {
+                        if (currentLevel === 2) { // تم تغيير المستوى ليتوافق مع التعديل
+                             logoTrigger.removeEventListener('click', handleTimeChallenge);
+                             showGenericFail(timeTrigger, 'فاتك التوقيت! يجب الضغط بعد توقف الشعار مباشرة.');
+                             logoTrigger.classList.remove('shaking'); 
+                             setTimeout(() => { timeTrigger.innerHTML = '<strong>2-</strong> أم ستواصل العمل وتتصنّع الجهل من أجل المال؟'; }, 1500);
+                        }
+                    }, 1500); 
+
+                    logoTrigger.addEventListener('click', handleTimeChallenge);
+
+                }, stopTime);
+            } else {
+                showGenericFail(timeTrigger);
+            }
+        });
+
+        function handleTimeChallenge() {
+            if (currentLevel === 2) { // تم تغيير المستوى ليتوافق مع التعديل
+                logoTrigger.removeEventListener('click', handleTimeChallenge);
+                clearTimeout(timer);
+                
+                if (!logoTrigger.classList.contains('shaking')) {
+                    success('ممتاز! توقيت مثالي. النظام يقبل الوصول للمفتاح الأخير.', true); 
+                    timeTrigger.innerHTML = '<strong>2-</strong> تم فك شفرة التوقيت.';
+                } else {
+                    fail('عجلت جداً! يجب الانتظار حتى يتوقف الاهتزاز تماماً.');
+                    logoTrigger.classList.remove('shaking'); 
+                    timeTrigger.innerHTML = '<strong>2-</strong> أم ستواصل العمل وتتصنّع الجهل من أجل المال؟';
+                }
+            }
+        }
+        
+        submitButton.addEventListener('click', () => {
+            if (!gameActive) return;
+
+            const level = levels[currentLevel];
+            
+            const input = cipherInput.value.trim().toLowerCase().replace(/\s/g, ''); 
+            const correctKey = String(level.key).toLowerCase().replace(/\s/g, ''); 
+            
+            if (input === correctKey) {
+                let message = 'تم فك الحماية.';
+                let isFinal = currentLevel === 2; // تم تغيير المستوى ليتوافق مع التعديل
+
+                if (level.type === 'math') {
+                    message = 'إجابة رياضية صحيحة! لا يمكنك خداع المنطق.';
+                }
+                
+                success(message, isFinal);
+                
+            } else {
+                fail('خطأ في الإدخال! حاول مجدداً.');
+            }
+        });
+
+
+        gameModal.addEventListener('click', (e) => {
+            if (e.target === gameModal) {
+                gameModal.style.display = 'none';
+                gameActive = false;
+            }
+        });
+    </script>
+</body>
+</html>
         }
 
         /* ====== رسالة "لا يوجد أحداث" ====== */
